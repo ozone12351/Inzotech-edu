@@ -1,0 +1,29 @@
+#include <DHT11.h> //ประกาศการใช้ library dht
+
+DHT11 dht11(A0); // กำหนดว่าพิน A0 เป็นเซ็นเซอร์ DHT
+
+void setup() {
+    // เริ่มคุยกับคอมด้วยความเร็ว 9600
+    Serial.begin(9600);
+}
+
+void loop() {
+    int temperature = 0;
+    int humidity = 0;
+
+    // ลองอ่านค่า
+    int result = dht11.readTemperatureHumidity(temperature, humidity);
+
+    // เช็คค่าการอ่าน
+    // ถ้าอ่านค่าได้ให้ปริ้นค่า
+    // ถ้าไม่ได้ให้ขึ้น error
+    if (result == 0) {
+        Serial.print("Temperature: ");
+        Serial.print(temperature);
+        Serial.print(" °C\tHumidity: ");
+        Serial.print(humidity);
+        Serial.println(" %");
+    } else {
+        Serial.println(DHT11::getErrorString(result));
+    }
+}
