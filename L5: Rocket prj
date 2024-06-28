@@ -34,74 +34,85 @@ void setup() {
   }
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.
-  
 }
 void loop() {
-
-  // เก็บข้อมูล
-  Serial.print("Temperature = ");
-  temp = bmp.readTemperature();
-  Serial.print(temp);
-  Serial.println(" *C");
-
-  Serial.print("Pressure = ");
-  bar = bmp.readPressure();
-  Serial.print(bar);
-  Serial.println(" Pa");
-
-  Serial.print("Altitude = ");
-  alt = bmp.readAltitude();
-  Serial.print(alt);
-  Serial.println(" meters");
-
-  Serial.print("Pressure at sealevel (calculated) = ");
-  seapa = bmp.readSealevelPressure();
-  Serial.print(seapa);
-  Serial.println(" Pa");
-
-  Serial.print("Real altitude = ");
-  height = bmp.readAltitude(seaLevelPressure_hPa * 100);
-  Serial.print(height);
-  Serial.println(" meters");
-
-  Serial.println();
-
-  co = analogRead(A0);
-  Serial.print("CO: ");
-  Serial.println(co);
-
-
-  myFile = SD.open("log.txt", FILE_WRITE);  // สร้างไฟล์ที่ชื่อ log.txt ใส่ตัวแปร myfile
-  
-
-  if (myFile) {
-    Serial.print("Writing to log.txt...");
-    myFile.print("DATA ");
-    myFile.println(i);
-
-    myFile.print("Height: ");
-    myFile.println(height);
-
-    myFile.print("Temp: ");
-    myFile.print(temp);
-    myFile.println(" C");
-
-    myFile.print("Presure: ");
-    myFile.print(bar);
-    myFile.println(" PA");
-
-    myFile.print("CO: ");
-    myFile.println(co);
-
-    myFile.println("       ");
-    // ปิดไฟล์
-    myFile.close();
-    Serial.println("done.");
+  String done = Serial.readString();
+  done.trim();
+  if (done == "done") {
+    while (1) {
+      done = Serial.readString();
+      done.trim();
+      if (done == "continue"){
+        break;
+      }
+    }
   } else {
-    // ถ้าเปิดไฟล์ไม่ได้ให้ขึ้น error
-    Serial.println("error opening log.txt");
-  }
+    // เก็บข้อมูล
+    Serial.print("Temperature = ");
+    temp = bmp.readTemperature();
+    Serial.print(temp);
+    Serial.println(" *C");
 
-  i++;
-  delay(100);
+    Serial.print("Pressure = ");
+    bar = bmp.readPressure();
+    Serial.print(bar);
+    Serial.println(" Pa");
+
+    Serial.print("Altitude = ");
+    alt = bmp.readAltitude();
+    Serial.print(alt);
+    Serial.println(" meters");
+
+    Serial.print("Pressure at sealevel (calculated) = ");
+    seapa = bmp.readSealevelPressure();
+    Serial.print(seapa);
+    Serial.println(" Pa");
+
+    Serial.print("Real altitude = ");
+    height = bmp.readAltitude(seaLevelPressure_hPa * 100);
+    Serial.print(height);
+    Serial.println(" meters");
+
+    co = analogRead(A0);
+    Serial.print("CO: ");
+    Serial.println(co);
+
+
+
+
+    myFile = SD.open("log.txt", FILE_WRITE);  // สร้างไฟล์ที่ชื่อ log.txt ใส่ตัวแปร myfile
+
+
+    if (myFile) {
+      Serial.print("Writing to log.txt...");
+      myFile.print("DATA ");
+      myFile.println(i);
+
+      myFile.print("Height: ");
+      myFile.println(height);
+
+      myFile.print("Temp: ");
+      myFile.print(temp);
+      myFile.println(" C");
+
+      myFile.print("Presure: ");
+      myFile.print(bar);
+      myFile.println(" PA");
+
+      myFile.print("CO: ");
+      myFile.println(co);
+
+      myFile.println("       ");
+      // ปิดไฟล์
+      myFile.close();
+      Serial.println("done.");
+    } else {
+      // ถ้าเปิดไฟล์ไม่ได้ให้ขึ้น error
+      Serial.println("error opening log.txt");
+    }
+
+    i++;
+    Serial.println();
+  }
+  delay(1000);
 }
