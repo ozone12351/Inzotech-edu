@@ -10,6 +10,7 @@ int bar = 0;
 int alt = 0;
 int seapa = 0;
 int temp = 0;
+int i = 0;
 
 #define seaLevelPressure_hPa 1013.25
 Adafruit_BMP085 bmp;
@@ -33,6 +34,7 @@ void setup() {
   }
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.
+  
 }
 void loop() {
 
@@ -64,30 +66,42 @@ void loop() {
 
   Serial.println();
 
-  co = digitalRead(A0);
+  co = analogRead(A0);
   Serial.print("CO: ");
   Serial.println(co);
 
 
   myFile = SD.open("log.txt", FILE_WRITE);  // สร้างไฟล์ที่ชื่อ log.txt ใส่ตัวแปร myfile
+  
 
   if (myFile) {
-    Serial.print("Writing to test.txt...");
-    myFile.println("DATA:");
+    Serial.print("Writing to log.txt...");
+    myFile.print("DATA ");
+    myFile.println(i);
+
     myFile.print("Height: ");
     myFile.println(height);
+
     myFile.print("Temp: ");
-    myFile.println(temp);
+    myFile.print(temp);
+    myFile.println(" C");
+
     myFile.print("Presure: ");
     myFile.print(bar);
-    myFile.print(" PA");
+    myFile.println(" PA");
+
     myFile.print("CO: ");
     myFile.println(co);
+
+    myFile.println("       ");
     // ปิดไฟล์
     myFile.close();
     Serial.println("done.");
   } else {
     // ถ้าเปิดไฟล์ไม่ได้ให้ขึ้น error
-    Serial.println("error opening test.txt");
+    Serial.println("error opening log.txt");
   }
+
+  i++;
+  delay(100);
 }
